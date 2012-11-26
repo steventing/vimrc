@@ -294,7 +294,7 @@ set hlsearch				" search highlighting
 	"let g:CCTreeEnhancedSymbolProcessing=1
 	"let g:CCTreeKeyHilightTree = '<C-\>l'
 
-	Bundle 'ych/CCTree'
+	"Bundle 'ych/CCTree'
 	nmap <F12> :CCTreeLoadDB<CR>
 	"let g:CCTreeEnhancedSymbolProcessing=1
 	"let g:CCTreeKeyHilightTree = '<C-\>l'
@@ -303,5 +303,5 @@ set hlsearch				" search highlighting
 	""""""""""""""""""""""""""""
 	" NERD commenter
 	"""""""""""""""""""""""""""
-	Bundle 'The-NERD-Commenter'
+	"Bundle 'The-NERD-Commenter'
 	Bundle 'gtk-vim-syntax'
