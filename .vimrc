@@ -92,17 +92,17 @@ endf
 
 noremap <space> :call ToggleFold()<CR>
 
-function RemoveTrailingWhitespace()
-	if &ft != "diff"
-		let b:curcol = col(".")
-		let b:curline = line(".")
-		silent! %s/\s\+$//
-		silent! %s/\(\s*\n\)\+\%$//
-		call cursor(b:curline, b:curcol)
-	endif
-endfunction
+"function RemoveTrailingWhitespace()
+	"if &ft != "diff"
+		"let b:curcol = col(".")
+		"let b:curline = line(".")
+		"silent! %s/\s\+$//
+		"silent! %s/\(\s*\n\)\+\%$//
+		"call cursor(b:curline, b:curcol)
+	"endif
+"endfunction
 
-autocmd BufWritePre * call RemoveTrailingWhitespace()
+"autocmd BufWritePre * call RemoveTrailingWhitespace()
 
 
 "if has('cscope')
@@ -121,7 +121,7 @@ autocmd BufWritePre * call RemoveTrailingWhitespace()
 
 func FormartSrc()
 	exec "w"
-	if &filetype == 'c'
+	if &filetype == 'c' || &filetype == 'cpp'
 		exec "!astyle %"
 		exec "e! %"
 	"elseif &filetype == 'cpp'
@@ -294,7 +294,7 @@ set hlsearch				" search highlighting
 	"let g:CCTreeEnhancedSymbolProcessing=1
 	"let g:CCTreeKeyHilightTree = '<C-\>l'
 
-	"Bundle 'ych/CCTree'
+	Bundle 'ych/CCTree'
 	nmap <F12> :CCTreeLoadDB<CR>
 	"let g:CCTreeEnhancedSymbolProcessing=1
 	"let g:CCTreeKeyHilightTree = '<C-\>l'
@@ -303,5 +303,5 @@ set hlsearch				" search highlighting
 	""""""""""""""""""""""""""""
 	" NERD commenter
 	"""""""""""""""""""""""""""
-	"Bundle 'The-NERD-Commenter'
+	Bundle 'The-NERD-Commenter'
 	Bundle 'gtk-vim-syntax'
