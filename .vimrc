@@ -71,11 +71,11 @@ imap <F4> <Esc> :q!<CR>
 vmap <F4> <Esc> :q!<CR>
 omap <F4> <Esc> :q!<CR>
 
-nmap <F9> :!make<CR>
-cmap <F9> <Esc> :!make<CR>
-imap <F9> <Esc> :!make<CR>
-vmap <F9> <Esc> :!make<CR>
-omap <F9> <Esc> :!make<CR>
+autocmd BufRead *.py nmap <F9> :w !python %<CR>
+autocmd BufRead *.sh nmap <F9> :w !sh %<CR>
+autocmd FileType php noremap <F9> :w!<CR>:!/usr/bin/php %<CR>
+autocmd FileType c map :!gcc --o "%:p:r.out" "%:p" %% "%:r.out"<CR>
+autocmd BufRead,BufNewFile *.py vmap f :w !python <CR>
 
 fu! ToggleFold()
 	if foldlevel('.') == 0
@@ -305,3 +305,6 @@ set hlsearch				" search highlighting
 	"""""""""""""""""""""""""""
 	Bundle 'The-NERD-Commenter'
 	Bundle 'gtk-vim-syntax'
+	Bundle 'rkulla/pydiction'
+	let g:pydiction_location = '/home/steven/.vim/bundle/pydiction/complete-dict'
+	"let g:pydiction_menu_height = 3
