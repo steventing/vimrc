@@ -50,7 +50,7 @@ set tags+=$HOME/tags
 
 autocmd InsertLeave * hi CursorLine cterm=BOLD ctermfg=NONE   ctermbg=17
 autocmd InsertEnter * hi CursorLine cterm=BOLD ctermfg=NONE   ctermbg=238
-nnoremap <C-J> a<CR><Esc>k$
+nnoremap <C-N> a<CR><Esc>k$
 nnoremap <F8> :tabn<CR>
 nnoremap <F7> :tabp<CR>
 nmap <F2> :w<cr>
