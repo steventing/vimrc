@@ -205,8 +205,10 @@ set nocindent
 set noautoindent
 set nocopyindent
 set nosmartindent
-
-
+map <C-j> 10j
+map <C-k> 10k
+map <C-h> 10h
+map <C-l> 10l
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Syntax                                                      "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
