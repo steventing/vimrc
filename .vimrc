@@ -277,9 +277,36 @@ set hlsearch				" search highlighting
 	" vim-powerline
 	" https://github.com/Lokaltog/vim-powerline
 	""""""""""""""""""""""""""""""
-	Bundle 'Lokaltog/vim-powerline'
-	let g:Powerline_symbols = 'fancy'
-	let g:Powerline_symbols = 'unicode'
+	"Bundle 'Lokaltog/vim-powerline'
+	"let g:Powerline_symbols = 'fancy'
+	"let g:Powerline_symbols = 'unicode'
+	Plugin 'tpope/vim-surround'
+	let g:surround_113="#{\r}"     " v
+	let g:surround_35="#{\r}"      " #
+	let g:surround_45="<% \r %>"   " -
+	let g:surround_61="<%= \r %>"  " =
+
+	Plugin 'bling/vim-airline'
+	let g:airline_powerline_fonts=1
+	let g:airline#extensions#tabline#enabled=1
+	let g:airline#extensions#tabline#buffer_nr_show=0
+	let g:airline#extensions#tabline#buffer_nr_format='%s: '
+	"let g:airline_theme='powerlineish'
+	let g:airline_theme='papercolor'
+	"let g:airline_theme='bubblegum'
+
+
+	Plugin 'kien/ctrlp.vim'
+	let g:ctrlp_custom_ignore = {
+	  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+	  \ 'binary file': '\v\.(exe|so|dll)$',
+	  \ }
+	let g:ctrlp_working_path_mode=0
+	let g:ctrlp_match_window_bottom=1
+	let g:ctrlp_max_height=15
+	let g:ctrlp_match_window_reversed=0
+	let g:ctrlp_mruf_max=500
+	let g:ctrlp_follow_symlinks=1
 
 	""""""""""""""""""""""""""""""
 	" vim-unimpaired
