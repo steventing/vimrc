@@ -11,7 +11,7 @@ set fenc=utf-8                         " Default file encoding
 "set fileencodings=utf-8,big5,euc-jp,gbk,euc-kr,utf-bom,iso8859-1
 set fencs=utf-8,cp950,big5,euc-jp      " File encodings guess list
 "set exrc                               " Include a .vimrc in the project's directory
-"set secure                             " don't load other's .vimrc 之 autocmd
+"set secure                             " don't load other's .vimrc  autocmd
 set showcmd                            " See partial commands as you type
 set showmatch                          " Cursor shows matching ) and }
 set showmode                           " Show current mode
@@ -26,6 +26,7 @@ set wildmenu                           " wild char completion menu"
 "set smarttab                           " insert tabs on the start of a line according to context
 set showfulltag                        " Show full completion tags
 set laststatus=2                       " The last window will always have a status line
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Steven                                                      "
@@ -287,13 +288,44 @@ set hlsearch				" search highlighting
 	let g:surround_61="<%= \r %>"  " =
 
 	Plugin 'bling/vim-airline'
+	Plugin 'vim-airline/vim-airline-themes'
 	let g:airline_powerline_fonts=1
 	let g:airline#extensions#tabline#enabled=1
 	let g:airline#extensions#tabline#buffer_nr_show=0
 	let g:airline#extensions#tabline#buffer_nr_format='%s: '
+	let g:airline#extensions#tabline#left_sep = ' '
+	let g:airline#extensions#tabline#left_alt_sep = '|'
 	"let g:airline_theme='powerlineish'
 	let g:airline_theme='papercolor'
 	"let g:airline_theme='bubblegum'
+	if !exists('g:airline_symbols')
+		let g:airline_symbols = {}
+	endif
+	" unicode symbols
+	 "let g:airline_left_sep = '»'
+	 let g:airline_left_sep = '▶'
+	 "let g:airline_right_sep = '«'
+	 let g:airline_right_sep = '◀'
+	 let g:airline_symbols.linenr = '␊'
+	 "let g:airline_symbols.linenr = '␤'
+	 "let g:airline_symbols.linenr = '¶'
+	 let g:airline_symbols.branch = '⎇'
+	 let g:airline_symbols.paste = 'ρ'
+	 "let g:airline_symbols.paste = 'Þ'
+	 "let g:airline_symbols.paste = '∥'
+	 let g:airline_symbols.whitespace = 'Ξ'
+	 let g:airline_left_alt_sep = '«'
+	 let g:airline_right_alt_sep = '»'
+	 let g:airline_symbols.readonly = 'r'
+
+	" airline symbols
+	 "let g:airline_left_sep = ''
+	 "let g:airline_left_alt_sep = ''
+	 "let g:airline_right_sep = ''
+	 "let g:airline_right_alt_sep = ''
+	 "let g:airline_symbols.branch = ''
+	 "let g:airline_symbols.readonly = ''
+	 "let g:airline_symbols.linenr = ''
 
 
 	Plugin 'kien/ctrlp.vim'
@@ -323,11 +355,11 @@ set hlsearch				" search highlighting
 	"let g:CCTreeEnhancedSymbolProcessing=1
 	"let g:CCTreeKeyHilightTree = '<C-\>l'
 
-	Bundle 'ych/CCTree'
-	nmap <F12> :CCTreeLoadDB<CR>
+	"Bundle 'ych/CCTree'
+	"nmap <F12> :CCTreeLoadDB<CR>
 	"let g:CCTreeEnhancedSymbolProcessing=1
 	"let g:CCTreeKeyHilightTree = '<C-\>l'
-	let g:CCTreeOrientation = "rightbelow"
+	"let g:CCTreeOrientation = "rightbelow"
 
 	""""""""""""""""""""""""""""
 	" NERD commenter
