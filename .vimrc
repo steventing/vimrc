@@ -215,7 +215,8 @@ map <C-l> 10l
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 syntax on				    " syntax highlight
 set hlsearch				" search highlighting
-
+set cc=80
+highlight ColorColumn ctermbg=236
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plug-in configuration                                       "
