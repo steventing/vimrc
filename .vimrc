@@ -52,8 +52,8 @@ set tags+=$HOME/tags
 autocmd InsertLeave * hi CursorLine cterm=BOLD ctermfg=NONE   ctermbg=17
 autocmd InsertEnter * hi CursorLine cterm=BOLD ctermfg=NONE   ctermbg=238
 nnoremap <C-N> a<CR><Esc>k$
-nnoremap <F8> :tabn<CR>
-nnoremap <F7> :tabp<CR>
+"nnoremap <F8> :tabn<CR>
+"nnoremap <F7> :tabp<CR>
 nmap <F2> :w<cr>
 cmap <F2> <Esc> :w<CR>
 imap <F2> <Esc> :w<CR>
@@ -77,6 +77,7 @@ autocmd BufRead *.sh nmap <F9> :w !sh %<CR>
 autocmd FileType php noremap <F9> :w!<CR>:!/usr/bin/php %<CR>
 autocmd FileType c map :!gcc --o "%:p:r.out" "%:p" %% "%:r.out"<CR>
 autocmd BufRead,BufNewFile *.py vmap f :w !python <CR>
+autocmd QuickFixCmdPost *grep* cwindow
 
 fu! ToggleFold()
 	if foldlevel('.') == 0
@@ -170,23 +171,44 @@ let g:mapleader = ","
 
 nmap <Leader>w :w!<CR>
 nmap <Leader>q :q<CR>
-nmap <Leader>p :set paste<CR>
-nmap <Leader>c :!./configure<CR>
-nmap <Leader>mw :set makeprg=wkmake<CR>
-nmap <Leader>mn :set makeprg=make<CR>
+nmap <Leader>b :bdelete<CR>
+"nmap <Leader>p :set paste<CR>
+nmap <Leader>j :tabp<CR>
+nmap <Leader>k :tabn<CR>
+"nmap <Leader>mn :set makeprg=make<CR>
 nmap <Leader>fr :call FormartSrc()<CR>
+nmap <Leader>p <C-W>gf :tabm<CR>
+nmap <Leader>m :tabm<CR>
 
 " Only for C
 set cscopetag
 set cscopeverbose
-nmap <F10> :!ctags -R --sort=yes --c++-kinds=+px --fields=+iaS --extra=+q .<CR>
-nmap <F11> :!find . -iname '*.[ch]' \| cscope -Rbq<CR>
+nmap <F8> :!ctags -R --sort=yes --c++-kinds=+px --fields=+iaS --extra=+q .<CR>
+nmap <F7> :!find . -iname '*.[ch]' \| cscope -Rbq<CR>
 "nmap <F10> :!ctags --languages=c -R --sort=yes --c-kinds=+lx --fields=+aS --extra=+q .<CR>
 "nmap <F12> :!find . -iname '*.[ch]' \| cscope -Rbq<CR>
 " For C++ and C
 "nmap <F9> :!ctags --languages=c,c++ -R --sort=yes --c++-kinds=+plx --c-kinds=+plx --fields=+iaS --extra=+q .<CR>
 "nmap <F12> :!find . -iname '*.[ch]' -or -iname '*.[ch]pp' \| cscope -Rbq<CR>
 
+func GitGrep(...)
+  let save = &grepprg
+  set grepprg=git\ grep\ -n\ $*
+  let s = 'grep'
+  for i in a:000
+	let s = s . ' ' . i
+  endfor
+  exe s
+  let &grepprg = save
+endfun
+command -nargs=? G call GitGrep(<f-args>)
+nmap <Leader>gg :G 
+
+func GitGrepWord()
+  normal! "zyiw
+  call GitGrep('-w -e ', getreg('z'))
+endf
+nmap <Leader>G :call GitGrepWord()<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Folding                                                     "
@@ -223,7 +245,7 @@ highlight ColorColumn ctermbg=236
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 	""""""""""""""""""""""""""""""
 	" vundle
-	" Https://github.com/gmarik/vundle
+	" https://github.com/gmarik/vundle
 	""""""""""""""""""""""""""""""
 	set rtp+=~/.vim/bundle/vundle/
 	call vundle#rc()
@@ -303,31 +325,32 @@ highlight ColorColumn ctermbg=236
 		let g:airline_symbols = {}
 	endif
 	" unicode symbols
-	 "let g:airline_left_sep = '»'
-	 let g:airline_left_sep = '▶'
-	 "let g:airline_right_sep = '«'
-	 let g:airline_right_sep = '◀'
-	 let g:airline_symbols.linenr = '␊'
-	 "let g:airline_symbols.linenr = '␤'
-	 "let g:airline_symbols.linenr = '¶'
-	 let g:airline_symbols.branch = '⎇'
-	 let g:airline_symbols.paste = 'ρ'
-	 "let g:airline_symbols.paste = 'Þ'
-	 "let g:airline_symbols.paste = '∥'
-	 let g:airline_symbols.whitespace = 'Ξ'
-	 let g:airline_left_alt_sep = '«'
-	 let g:airline_right_alt_sep = '»'
-	 let g:airline_symbols.readonly = 'r'
+	"let g:airline_left_sep = '»'
+	let g:airline_left_sep = '▶'
+	"let g:airline_right_sep = '«'
+	let g:airline_right_sep = '◀'
+	let g:airline_symbols.linenr = '␊'
+	"let g:airline_symbols.linenr = '␤'
+	"let g:airline_symbols.linenr = '¶'
+	let g:airline_symbols.branch = '⎇'
+	"let g:airline_symbols.paste = 'ρ'
+	let g:airline_symbols.paste = 'P'
+	"let g:airline_symbols.paste = 'Þ'
+	"let g:airline_symbols.paste = '∥'
+	let g:airline_symbols.whitespace = 'Ξ'
+	"let g:airline_symbols.whitespace = 'W'
+	let g:airline_left_alt_sep = '«'
+	let g:airline_right_alt_sep = '»'
+	let g:airline_symbols.readonly = 'r'
 
 	" airline symbols
-	 "let g:airline_left_sep = ''
-	 "let g:airline_left_alt_sep = ''
-	 "let g:airline_right_sep = ''
-	 "let g:airline_right_alt_sep = ''
-	 "let g:airline_symbols.branch = ''
-	 "let g:airline_symbols.readonly = ''
-	 "let g:airline_symbols.linenr = ''
-
+	"let g:airline_left_sep = ''
+	"let g:airline_left_alt_sep = ''
+	"let g:airline_right_sep = ''
+	"let g:airline_right_alt_sep = ''
+	"let g:airline_symbols.branch = ''
+	"let g:airline_symbols.readonly = ''
+	"let g:airline_symbols.linenr = ''
 
 	Plugin 'kien/ctrlp.vim'
 	let g:ctrlp_custom_ignore = {
