@@ -26,6 +26,8 @@ set wildmenu                           " wild char completion menu"
 "set smarttab                           " insert tabs on the start of a line according to context
 set showfulltag                        " Show full completion tags
 set laststatus=2                       " The last window will always have a status line
+set incsearch
+
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -172,12 +174,14 @@ let g:mapleader = ","
 nmap <Leader>w :w!<CR>
 nmap <Leader>q :q<CR>
 nmap <Leader>b :bdelete<CR>
+nmap <Leader>l :b#<CR>
 "nmap <Leader>p :set paste<CR>
 nmap <Leader>j :tabp<CR>
 nmap <Leader>k :tabn<CR>
+nmap <Leader>T :tabnew<CR>
 "nmap <Leader>mn :set makeprg=make<CR>
 nmap <Leader>fr :call FormartSrc()<CR>
-nmap <Leader>p <C-W>gf :tabm<CR>
+nmap <Leader>p <C-W>gf<CR>
 nmap <Leader>m :tabm<CR>
 
 " Only for C
@@ -208,7 +212,7 @@ func GitGrepWord()
   normal! "zyiw
   call GitGrep('-w -e ', getreg('z'))
 endf
-nmap <Leader>G :call GitGrepWord()<CR>
+nmap <Leader>G :call GitGrepWord()<CR> :b#<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Folding                                                     "
@@ -217,6 +221,7 @@ let g:xml_syntax_folding=1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " FileType                                                    "
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 filetype off				" Disable filetype detection, which vundle need
 filetype indent on			" Enable filetype-specific indenting
