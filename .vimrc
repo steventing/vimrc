@@ -51,6 +51,7 @@ set fillchars=vert:\|,fold:\
 set foldminlines=1
 set tags+=$HOME/tags
 
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 autocmd InsertLeave * hi CursorLine cterm=BOLD ctermfg=NONE   ctermbg=17
 autocmd InsertEnter * hi CursorLine cterm=BOLD ctermfg=NONE   ctermbg=238
 nnoremap <C-N> a<CR><Esc>k$
@@ -206,13 +207,18 @@ func GitGrep(...)
   let &grepprg = save
 endfun
 command -nargs=? G call GitGrep(<f-args>)
-nmap <Leader>gg :G 
+nmap <Leader>gg :G
 
 func GitGrepWord()
   normal! "zyiw
   call GitGrep('-w -e ', getreg('z'))
 endf
 nmap <Leader>G :call GitGrepWord()<CR> :b#<CR>
+nmap <Leader>gg :G
+
+"for vimgrep
+map <leader>gv :vimgrep //j **/*.[ch]<left><left><left><left><left><left><left><left><left><left><left><left>
+map <leader>gc :execute "vimgrep /" . expand("<cword>") . "/j **/*.[ch]"<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Folding                                                     "
