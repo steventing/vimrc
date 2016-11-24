@@ -219,7 +219,7 @@ nmap <Leader>gg :G
 "for vimgrep
 map <leader>gv :vimgrep //j **/*.[ch]<left><left><left><left><left><left><left><left><left><left><left><left>
 map <leader>gc :execute "vimgrep /" . expand("<cword>") . "/j **/*.[ch]"<CR>
-
+map <leader>h  :match WhitespaceEOL /\s\+$/ <CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Folding                                                     "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -250,6 +250,9 @@ syntax on				    " syntax highlight
 set hlsearch				" search highlighting
 set cc=80
 highlight ColorColumn ctermbg=236
+highlight WhitespaceEOL ctermbg=red guibg=red
+"set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
+set listchars=tab:>-,trail:-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plug-in configuration                                       "
