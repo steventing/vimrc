@@ -50,6 +50,7 @@ set foldlevel=0
 set fillchars=vert:\|,fold:\
 set foldminlines=1
 set tags+=$HOME/tags
+set termencoding=utf-8
 
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 autocmd InsertLeave * hi CursorLine cterm=BOLD ctermfg=NONE   ctermbg=17
@@ -239,6 +240,7 @@ set nocindent
 set noautoindent
 set nocopyindent
 set nosmartindent
+set hidden
 map <C-j> 10j
 map <C-k> 10k
 map <C-h> 10h
@@ -253,6 +255,14 @@ highlight ColorColumn ctermbg=236
 highlight WhitespaceEOL ctermbg=red guibg=red
 "set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
 set listchars=tab:>-,trail:-
+" 防止tmux下vim的背景色显示异常
+" Refer: http://sunaku.github.io/vim-256color-bce.html
+if &term =~ '256color'
+  " disable Background Color Erase (BCE) so that color schemes
+  " render properly when inside 256-color tmux and GNU screen.
+  " see also http://snk.tuxfamily.org/log/vim-256color-bce.html
+  set t_ut=
+endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plug-in configuration                                       "
@@ -407,3 +417,21 @@ set listchars=tab:>-,trail:-
 	Bundle 'rkulla/pydiction'
 	let g:pydiction_location = '/home/steven/.vim/bundle/pydiction/complete-dict'
 	"let g:pydiction_menu_height = 3
+	 Bundle 'Lokaltog/vim-easymotion'
+	 let g:EasyMotion_smartcase = 1
+	 let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
+	 map <Leader><leader>h <Plug>(easymotion-linebackward)
+	 map <Leader><Leader>j <Plug>(easymotion-j)
+	 map <Leader><Leader>k <Plug>(easymotion-k)
+	 map <Leader><leader>l <Plug>(easymotion-lineforward)
+	 " 重复上一次操作, 类似repeat插件, 很强大
+	 map <Leader><leader>. <Plug>(easymotion-repeat)
+
+	 "Bundle 'terryma/vim-multiple-cursors'
+	 "let g:multi_cursor_use_default_mapping=0
+	 "" Default mapping
+	 "let g:multi_cursor_next_key='<C-m>'
+	 "let g:multi_cursor_prev_key='<C-p>'
+	 "let g:multi_cursor_skip_key='<C-x>'
+	 "let g:multi_cursor_quit_key='<Esc>'
+
