@@ -55,7 +55,7 @@ set termencoding=utf-8
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 autocmd InsertLeave * hi CursorLine cterm=BOLD ctermfg=NONE   ctermbg=17
 autocmd InsertEnter * hi CursorLine cterm=BOLD ctermfg=NONE   ctermbg=238
-nnoremap <C-N> a<CR><Esc>k$
+"nnoremap <C-N> a<CR><Esc>k$
 "nnoremap <F8> :tabn<CR>
 "nnoremap <F7> :tabp<CR>
 nmap <F2> :w<cr>
@@ -427,11 +427,11 @@ endif
 	 " 重复上一次操作, 类似repeat插件, 很强大
 	 map <Leader><leader>. <Plug>(easymotion-repeat)
 
-	 "Bundle 'terryma/vim-multiple-cursors'
-	 "let g:multi_cursor_use_default_mapping=0
+	 Bundle 'terryma/vim-multiple-cursors'
+	 let g:multi_cursor_use_default_mapping=0
 	 "" Default mapping
-	 "let g:multi_cursor_next_key='<C-m>'
-	 "let g:multi_cursor_prev_key='<C-p>'
-	 "let g:multi_cursor_skip_key='<C-x>'
-	 "let g:multi_cursor_quit_key='<Esc>'
+	 let g:multi_cursor_next_key='<C-n>'
+	 let g:multi_cursor_prev_key='<C-m>'
+	 let g:multi_cursor_skip_key='<C-x>'
+	 let g:multi_cursor_quit_key='<Esc>'
 
