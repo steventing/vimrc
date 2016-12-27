@@ -51,6 +51,8 @@ set fillchars=vert:\|,fold:\
 set foldminlines=1
 set tags+=$HOME/tags
 set termencoding=utf-8
+set grepprg=rg\ -tc\ -tmake\ -tsh\ --vimgrep\ $*
+set grepformat=%f:%l:%c:%m
 
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 autocmd InsertLeave * hi CursorLine cterm=BOLD ctermfg=NONE   ctermbg=17
@@ -197,29 +199,29 @@ nmap <F7> :!find . -iname '*.[ch]' \| cscope -Rbq<CR>
 "nmap <F9> :!ctags --languages=c,c++ -R --sort=yes --c++-kinds=+plx --c-kinds=+plx --fields=+iaS --extra=+q .<CR>
 "nmap <F12> :!find . -iname '*.[ch]' -or -iname '*.[ch]pp' \| cscope -Rbq<CR>
 
-func GitGrep(...)
-  let save = &grepprg
-  set grepprg=git\ grep\ -n\ $*
-  let s = 'grep'
-  for i in a:000
-	let s = s . ' ' . i
-  endfor
-  exe s
-  let &grepprg = save
-endfun
-command -nargs=? G call GitGrep(<f-args>)
-nmap <Leader>gg :G
+"func GitGrep(...)
+  "let save = &grepprg
+  "set grepprg=git\ grep\ -n\ $*
+  "let s = 'grep'
+  "for i in a:000
+	"let s = s . ' ' . i
+  "endfor
+  "exe s
+  "let &grepprg = save
+"endfun
+"command -nargs=? G call GitGrep(<f-args>)
+"nmap <Leader>gg :G
 
-func GitGrepWord()
-  normal! "zyiw
-  call GitGrep('-w -e ', getreg('z'))
-endf
-nmap <Leader>G :call GitGrepWord()<CR> :b#<CR>
-nmap <Leader>gg :G
+"func GitGrepWord()
+  "normal! "zyiw
+  "call GitGrep('-w -e ', getreg('z'))
+"endf
+"nmap <Leader>G :call GitGrepWord()<CR> :b#<CR>
+"nmap <Leader>gg :G
 
 "for vimgrep
-map <leader>gv :vimgrep //j **/*.[ch]<left><left><left><left><left><left><left><left><left><left><left><left>
-map <leader>gc :execute "vimgrep /" . expand("<cword>") . "/j **/*.[ch]"<CR>
+map <leader>gg :grep 
+map <leader>G :execute "grep " . expand("<cword>") . " "<CR>
 map <leader>h  :match WhitespaceEOL /\s\+$/ <CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Folding                                                     "
