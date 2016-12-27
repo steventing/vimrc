@@ -34,9 +34,9 @@ set incsearch
 " Steven                                                      "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-set tabstop=4
+set tabstop=8
+set shiftwidth=8
 set noexpandtab
-set shiftwidth=4
 set hlsearch
 set cursorline
 set wrap
@@ -417,21 +417,21 @@ endif
 	Bundle 'rkulla/pydiction'
 	let g:pydiction_location = '/home/steven/.vim/bundle/pydiction/complete-dict'
 	"let g:pydiction_menu_height = 3
-	 Bundle 'Lokaltog/vim-easymotion'
-	 let g:EasyMotion_smartcase = 1
-	 let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
-	 map <Leader><leader>h <Plug>(easymotion-linebackward)
-	 map <Leader><Leader>j <Plug>(easymotion-j)
-	 map <Leader><Leader>k <Plug>(easymotion-k)
-	 map <Leader><leader>l <Plug>(easymotion-lineforward)
-	 " 重复上一次操作, 类似repeat插件, 很强大
-	 map <Leader><leader>. <Plug>(easymotion-repeat)
+	Bundle 'Lokaltog/vim-easymotion'
+	let g:EasyMotion_smartcase = 1
+	let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
+	map <Leader><leader>h <Plug>(easymotion-linebackward)
+	map <Leader><Leader>j <Plug>(easymotion-j)
+	map <Leader><Leader>k <Plug>(easymotion-k)
+	map <Leader><leader>l <Plug>(easymotion-lineforward)
+	" 重复上一次操作, 类似repeat插件, 很强大
+	map <Leader><leader>. <Plug>(easymotion-repeat)
 
-	 Bundle 'terryma/vim-multiple-cursors'
-	 let g:multi_cursor_use_default_mapping=0
-	 "" Default mapping
-	 let g:multi_cursor_next_key='<C-n>'
-	 let g:multi_cursor_prev_key='<C-m>'
-	 let g:multi_cursor_skip_key='<C-x>'
-	 let g:multi_cursor_quit_key='<Esc>'
+	Bundle 'terryma/vim-multiple-cursors'
+	let g:multi_cursor_use_default_mapping=0
+	"" Default mapping
+	let g:multi_cursor_next_key='<C-n>'
+	"let g:multi_cursor_prev_key='<C-l>'
+	let g:multi_cursor_skip_key='<C-x>'
+	let g:multi_cursor_quit_key='<Esc>'
 
