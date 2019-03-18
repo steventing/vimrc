@@ -16,7 +16,7 @@ set showcmd                            " See partial commands as you type
 set showmatch                          " Cursor shows matching ) and }
 set showmode                           " Show current mode
 set number                             " Show line number
-"set backspace=2                       " Can use backspace
+set backspace=2                       " Can use backspace
 set history=500                        " Set how many lines of history VIM have to remember
 set t_Co=256                           " Set number of colors
 "set ruler                              " Show the cursor position all the time
@@ -51,10 +51,13 @@ set fillchars=vert:\|,fold:\
 set foldminlines=1
 set tags+=$HOME/tags
 set termencoding=utf-8
-set grepprg=rg\ -tc\ -tmake\ -tsh\ --vimgrep\ $*
+set grepprg=rg\ -tc\ -tmake\ -tsh\ -tpy\ --vimgrep\ $*
 set grepformat=%f:%l:%c:%m
 
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+au BufRead,BufNewFile *.py,*pyw set shiftwidth=4
+au BufRead,BufNewFile *.py,*.pyw set expandtab
+
 autocmd InsertLeave * hi CursorLine cterm=BOLD ctermfg=NONE   ctermbg=17
 autocmd InsertEnter * hi CursorLine cterm=BOLD ctermfg=NONE   ctermbg=238
 "nnoremap <C-N> a<CR><Esc>k$
@@ -189,8 +192,9 @@ nmap <Leader>p <C-W>gf<CR>
 nmap <Leader>m :tabm<CR>
 
 " Only for C
-set cscopetag
-set cscopeverbose
+"set cscopetag
+"set cscopeverbose
+"set cscopeprg='gtags-cscope'
 nmap <F8> :!ctags -R --sort=yes --c++-kinds=+px --fields=+iaS --extra=+q .<CR>
 nmap <F7> :!find . -iname '*.[ch]' \| cscope -Rbq<CR>
 "nmap <F10> :!ctags --languages=c -R --sort=yes --c-kinds=+lx --fields=+aS --extra=+q .<CR>
@@ -220,7 +224,8 @@ nmap <F7> :!find . -iname '*.[ch]' \| cscope -Rbq<CR>
 "nmap <Leader>gg :G
 
 "for vimgrep
-map <leader>gg :grep 
+"map <leader>gg :grep
+map <leader>gg :Gtags
 map <leader>G :execute "grep " . expand("<cword>") . " "<CR>
 map <leader>h  :match WhitespaceEOL /\s\+$/ <CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -390,6 +395,16 @@ endif
 	let g:ctrlp_mruf_max=500
 	let g:ctrlp_follow_symlinks=1
 
+
+	""""""""""""""""""""""""""""""
+	" vim gtags
+	Plugin 'aceofall/gtags.vim'
+	set cscopetag
+	set cscopeprg='gtags-cscope'
+	let GtagsCscope_Auto_Load = 1
+	let GtagsCscope_Auto_Map = 1
+	let GtagsCscope_Quiet = 1
+	""""""""""""""""""""""""""""""
 	""""""""""""""""""""""""""""""
 	" vim-unimpaired
 	" https://github.com/tpope/vim-unimpaired
