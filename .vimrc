@@ -55,8 +55,10 @@ set grepprg=rg\ -tc\ -tmake\ -tsh\ -tpy\ --vimgrep\ $*
 set grepformat=%f:%l:%c:%m
 
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-au BufRead,BufNewFile *.py,*pyw set shiftwidth=4
-au BufRead,BufNewFile *.py,*.pyw set expandtab
+au BufRead,BufNewFile *.py,*pyw,*.cpp set shiftwidth=4
+au BufRead,BufNewFile *.py,*.pyw,*.cpp set expandtab
+au BufRead,BufNewFile *.py,*.pyw,*.cpp set ts=4
+au BufRead,BufNewFile *.py,*.pyw,*.cpp set sts=4
 
 autocmd InsertLeave * hi CursorLine cterm=BOLD ctermfg=NONE   ctermbg=17
 autocmd InsertEnter * hi CursorLine cterm=BOLD ctermfg=NONE   ctermbg=238
@@ -227,6 +229,8 @@ nmap <F7> :!find . -iname '*.[ch]' \| cscope -Rbq<CR>
 "map <leader>gg :grep
 map <leader>gg :Gtags
 map <leader>G :execute "grep " . expand("<cword>") . " "<CR>
+map <leader>s :execute "tab: cs f s " . expand("<cword>") <CR>
+map <leader>t :execute "tab: cs f t " . expand("<cword>") <CR>
 map <leader>h  :match WhitespaceEOL /\s\+$/ <CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Folding                                                     "
