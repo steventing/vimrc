@@ -231,7 +231,15 @@ map <leader>gg :Gtags
 map <leader>G :execute "grep " . expand("<cword>") . " "<CR>
 map <leader>s :execute "tab: cs f s " . expand("<cword>") <CR>
 map <leader>t :execute "tab: cs f t " . expand("<cword>") <CR>
-map <leader>h  :match WhitespaceEOL /\s\+$/ <CR>
+map <leader>h4 :execute "Highlight 4 " . expand("<cword>") <CR>
+map <leader>h5 :execute "Highlight 5 " . expand("<cword>") <CR>
+map <leader>h6 :execute "Highlight 6 " . expand("<cword>") <CR>
+map <leader>h7 :execute "Highlight 7 " . expand("<cword>") <CR>
+map <leader>hc4 :Hclear 4<CR>
+map <leader>hc5 :Hclear 5<CR>
+map <leader>hc6 :Hclear 6<CR>
+map <leader>hc7 :Hclear 7<CR>
+map <leader>hl  :match WhitespaceEOL /\s\+$/ <CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Folding                                                     "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
