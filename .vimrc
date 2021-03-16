@@ -188,6 +188,7 @@ nmap <Leader>l :b#<CR>
 nmap <Leader>j :tabp<CR>
 nmap <Leader>k :tabn<CR>
 nmap <Leader>T :tabnew<CR>
+nmap <Leader>S :tab split<CR>
 "nmap <Leader>mn :set makeprg=make<CR>
 nmap <Leader>fr :call FormartSrc()<CR>
 nmap <Leader>p <C-W>gf<CR>
