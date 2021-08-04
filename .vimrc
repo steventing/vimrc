@@ -34,9 +34,13 @@ set incsearch
 " Steven                                                      "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-set tabstop=8
-set shiftwidth=8
-set noexpandtab
+"set tabstop=8
+"set shiftwidth=8
+"set noexpandtab
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set sts=4
 set hlsearch
 set cursorline
 set wrap
@@ -51,7 +55,8 @@ set fillchars=vert:\|,fold:\
 set foldminlines=1
 set tags+=$HOME/tags
 set termencoding=utf-8
-set grepprg=rg\ -tc\ -tmake\ -tsh\ -tpy\ --vimgrep\ $*
+"set grepprg=rg\ -tc\ -tmake\ -tsh\ -tpy\ -th\ --vimgrep\ $*
+set grepprg=rg\ --vimgrep\ $*
 set grepformat=%f:%l:%c:%m
 
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
@@ -89,6 +94,7 @@ autocmd FileType php noremap <F9> :w!<CR>:!/usr/bin/php %<CR>
 autocmd FileType c map :!gcc --o "%:p:r.out" "%:p" %% "%:r.out"<CR>
 autocmd BufRead,BufNewFile *.py vmap f :w !python <CR>
 autocmd QuickFixCmdPost *grep* cwindow
+autocmd FileType qf wincmd J
 
 fu! ToggleFold()
 	if foldlevel('.') == 0
@@ -228,7 +234,9 @@ nmap <F7> :!find . -iname '*.[ch]' \| cscope -Rbq<CR>
 
 "for vimgrep
 "map <leader>gg :grep
-map <leader>gg :Gtags
+"map <leader>gg :Gtags
+map <leader>gg :g/ /caddexpr expand("%") . ":" . line(".") . ":" . getline(".")
+map <leader>gs :set grepprg=rg\ \-C2\ \-\-vimgrep\ \$\*
 map <leader>G :execute "grep " . expand("<cword>") . " "<CR>
 map <leader>s :execute "tab: cs f s " . expand("<cword>") <CR>
 map <leader>t :execute "tab: cs f t " . expand("<cword>") <CR>
@@ -241,6 +249,7 @@ map <leader>hc5 :Hclear 5<CR>
 map <leader>hc6 :Hclear 6<CR>
 map <leader>hc7 :Hclear 7<CR>
 map <leader>hl  :match WhitespaceEOL /\s\+$/ <CR>
+nnoremap <leader>c yiw:cs find s <C-R>=expand("<cword>")<CR><CR>:bd<CR>:cwindow<CR>/<C-R>0<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Folding                                                     "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -302,9 +311,9 @@ endif
 	Bundle 'majutsushi/tagbar'
 	nmap <F6> :TagbarToggle<CR>
 	" set focus to TagBar when opening it
-	let g:tagbar_left = 1
+	let g:tagbar_left = 0
 	let g:tagbar_sort = 0
-	let g:tagbar_width = 30
+	let g:tagbar_width = 40
 
 	""""""""""""""""""""""""""""""
 	" nerdtree
