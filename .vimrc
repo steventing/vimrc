@@ -205,7 +205,11 @@ nmap <Leader>m :tabm<CR>
 "set cscopeverbose
 "set cscopeprg='gtags-cscope'
 nmap <F8> :!ctags -R --sort=yes --c++-kinds=+px --fields=+iaS --extra=+q .<CR>
-nmap <F7> :!find . -iname '*.[ch]' \| cscope -Rbq<CR>
+nmap <F7> :!find -L . -iname '*.[ch]' > cscope.files <CR> :!cscope -Rb<CR>:cs kill -1 <CR>:cs add cscope.out<CR><CR>
+"nmap <F7> :!find -L . -iname '*.c' -o -iname '*.cpp' -o -iname '*.h' > cscope.files ;
+            "\:!cscope -b -i cscope.files -f cscope.out<CR>
+            "\:cs kill -1<CR>:cs add cscope.out<CR>
+"nmap <F7> :!cscope -Rbq<CR>:cs reset<CR><CR>
 "nmap <F10> :!ctags --languages=c -R --sort=yes --c-kinds=+lx --fields=+aS --extra=+q .<CR>
 "nmap <F12> :!find . -iname '*.[ch]' \| cscope -Rbq<CR>
 " For C++ and C
@@ -234,9 +238,10 @@ nmap <F7> :!find . -iname '*.[ch]' \| cscope -Rbq<CR>
 
 "for vimgrep
 "map <leader>gg :grep
-"map <leader>gg :Gtags
-map <leader>gg :g/ /caddexpr expand("%") . ":" . line(".") . ":" . getline(".")
-map <leader>gs :set grepprg=rg\ \-C2\ \-\-vimgrep\ \$\*
+map <leader>gs :execute "Gtags " . expand("<cword>") <CR>
+map <leader>gr :execute "Gtags -r " . expand("<cword>") <CR>
+"map <leader>gg :g/ /caddexpr expand("%") . ":" . line(".") . ":" . getline(".")
+"map <leader>gs :set grepprg=rg\ \-C2\ \-\-vimgrep\ \$\*
 map <leader>G :execute "grep " . expand("<cword>") . " "<CR>
 map <leader>s :execute "tab: cs f s " . expand("<cword>") <CR>
 map <leader>t :execute "tab: cs f t " . expand("<cword>") <CR>
@@ -328,9 +333,9 @@ endif
 	" https://github.com/tpope/vim-fugitive
 	""""""""""""""""""""""""""""""
 	Bundle 'tpope/vim-fugitive'
-	nmap <Leader>gbl :Gblame<CR>
-	nmap <Leader>gst :Gstatus<CR>
-	nmap <Leader>glo :Glog<CR>
+	nmap <Leader>gbl :Git blame<CR>
+	nmap <Leader>gst :Git<CR>
+	nmap <Leader>glo :Gclog<CR>
 
 	""""""""""""""""""""""""""""""
 	" gitv
@@ -420,12 +425,12 @@ endif
 
 	""""""""""""""""""""""""""""""
 	" vim gtags
-	Plugin 'aceofall/gtags.vim'
-	set cscopetag
-	set cscopeprg='gtags-cscope'
-	let GtagsCscope_Auto_Load = 1
-	let GtagsCscope_Auto_Map = 1
-	let GtagsCscope_Quiet = 1
+	"Plugin 'aceofall/gtags.vim'
+	"set cscopetag
+	"set cscopeprg='gtags-cscope'
+	"let GtagsCscope_Auto_Load = 1
+	"let GtagsCscope_Auto_Map = 1
+	"let GtagsCscope_Quiet = 1
 	""""""""""""""""""""""""""""""
 	""""""""""""""""""""""""""""""
 	" vim-unimpaired
@@ -448,6 +453,8 @@ endif
 	"let g:CCTreeKeyHilightTree = '<C-\>l'
 	"let g:CCTreeOrientation = "rightbelow"
 
+    """"""""""""""""""""""""""""
+    Plugin 'chazy/cscope_maps'
 	""""""""""""""""""""""""""""
 	" NERD commenter
 	"""""""""""""""""""""""""""
