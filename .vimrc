@@ -28,7 +28,17 @@ set showfulltag                        " Show full completion tags
 set laststatus=2                       " The last window will always have a status line
 set incsearch
 
+" How many tenths of a second to blink when matching brackets
+set mat=2
 
+" For regular expressions turn magic on
+set magic
+
+" Don't redraw while executing macros (good performance config)
+set lazyredraw
+
+" To allow X server clipboard
+set clipboard+=unnamedplus
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Steven                                                      "
@@ -58,6 +68,7 @@ set termencoding=utf-8
 "set grepprg=rg\ -tc\ -tmake\ -tsh\ -tpy\ -th\ --vimgrep\ $*
 set grepprg=rg\ --vimgrep\ $*
 set grepformat=%f:%l:%c:%m
+
 
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 au BufRead,BufNewFile *.py,*pyw,*.cpp set shiftwidth=4
@@ -242,19 +253,23 @@ map <leader>gs :execute "Gtags " . expand("<cword>") <CR>
 map <leader>gr :execute "Gtags -r " . expand("<cword>") <CR>
 "map <leader>gg :g/ /caddexpr expand("%") . ":" . line(".") . ":" . getline(".")
 "map <leader>gs :set grepprg=rg\ \-C2\ \-\-vimgrep\ \$\*
-map <leader>G :execute "grep " . expand("<cword>") . " "<CR>
+"map <leader>G :execute "grep " . expand("<cword>") . " "<CR>
 map <leader>s :execute "tab: cs f s " . expand("<cword>") <CR>
 map <leader>t :execute "tab: cs f t " . expand("<cword>") <CR>
-map <leader>h4 :execute "Highlight 4 " . expand("<cword>") <CR>
-map <leader>h5 :execute "Highlight 5 " . expand("<cword>") <CR>
-map <leader>h6 :execute "Highlight 6 " . expand("<cword>") <CR>
-map <leader>h7 :execute "Highlight 7 " . expand("<cword>") <CR>
-map <leader>hc4 :Hclear 4<CR>
-map <leader>hc5 :Hclear 5<CR>
-map <leader>hc6 :Hclear 6<CR>
-map <leader>hc7 :Hclear 7<CR>
+"map <leader>h4 :execute "Highlight 4 " . expand("<cword>") <CR>
+"map <leader>h5 :execute "Highlight 5 " . expand("<cword>") <CR>
+"map <leader>h6 :execute "Highlight 6 " . expand("<cword>") <CR>
+"map <leader>h7 :execute "Highlight 7 " . expand("<cword>") <CR>
+"map <leader>h8 :execute "Highlight 8 " . expand("<cword>") <CR>
+"map <leader>hc4 :Hclear 4<CR>
+"map <leader>hc5 :Hclear 5<CR>
+"map <leader>hc6 :Hclear 6<CR>
+"map <leader>hc7 :Hclear 7<CR>
+"map <leader>hc8 :Hclear 8<CR>
 map <leader>hl  :match WhitespaceEOL /\s\+$/ <CR>
 nnoremap <leader>c yiw:cs find s <C-R>=expand("<cword>")<CR><CR>:bd<CR>:cwindow<CR>/<C-R>0<CR>
+
+map <leader>h1 :execute "Highlight 8 " . expand("<cword>") <CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Folding                                                     "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -298,6 +313,23 @@ if &term =~ '256color'
   set t_ut=
 endif
 
+call plug#begin()
+Plug 'vim-airline/vim-airline', { 'tag': 'v0.10' }
+Plug 'vim-airline/vim-airline-themes'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
+Plug 'ntpeters/vim-better-whitespace'
+Plug 'preservim/nerdtree'
+Plug 'majutsushi/tagbar'
+Plug 'thaerkh/vim-workspace'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'preservim/nerdcommenter'
+"Plug 'unblevable/quick-scope'
+call plug#end()
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plug-in configuration                                       "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -305,15 +337,14 @@ endif
 	" vundle
 	" https://github.com/gmarik/vundle
 	""""""""""""""""""""""""""""""
-	set rtp+=~/.vim/bundle/vundle/
-	call vundle#rc()
-	Bundle 'gmarik/vundle'
+	"set rtp+=~/.vim/bundle/vundle/
+	"call vundle#rc()
+	"Bundle 'gmarik/vundle'
 
 	""""""""""""""""""""""""""""""
 	" tagbar
 	" https://github.com/majutsushi/tagbar
 	""""""""""""""""""""""""""""""
-	Bundle 'majutsushi/tagbar'
 	nmap <F6> :TagbarToggle<CR>
 	" set focus to TagBar when opening it
 	let g:tagbar_left = 0
@@ -324,7 +355,7 @@ endif
 	" nerdtree
 	" https://github.com/scrooloose/nerdtree
 	""""""""""""""""""""""""""""""
-	Bundle 'scrooloose/nerdtree'
+	"Bundle 'scrooloose/nerdtree'
 	nmap <F5> :NERDTreeToggle<CR>
 	"let g:NERDTreeWinSize = 25
 
@@ -332,7 +363,7 @@ endif
 	" vim-fugitive
 	" https://github.com/tpope/vim-fugitive
 	""""""""""""""""""""""""""""""
-	Bundle 'tpope/vim-fugitive'
+	"Bundle 'tpope/vim-fugitive'
 	nmap <Leader>gbl :Git blame<CR>
 	nmap <Leader>gst :Git<CR>
 	nmap <Leader>glo :Gclog<CR>
@@ -362,14 +393,15 @@ endif
 	"Bundle 'Lokaltog/vim-powerline'
 	"let g:Powerline_symbols = 'fancy'
 	"let g:Powerline_symbols = 'unicode'
-	Plugin 'tpope/vim-surround'
+    "
+	"Plugin 'tpope/vim-surround'
 	let g:surround_113="#{\r}"     " v
 	let g:surround_35="#{\r}"      " #
 	let g:surround_45="<% \r %>"   " -
 	let g:surround_61="<%= \r %>"  " =
 
-	Plugin 'bling/vim-airline'
-	Plugin 'vim-airline/vim-airline-themes'
+	"Plugin 'bling/vim-airline'
+	"Plugin 'vim-airline/vim-airline-themes'
 	let g:airline_powerline_fonts=1
 	let g:airline#extensions#tabline#enabled=1
 	let g:airline#extensions#tabline#buffer_nr_show=0
@@ -410,17 +442,17 @@ endif
 	"let g:airline_symbols.readonly = ''
 	"let g:airline_symbols.linenr = ''
 
-	Plugin 'kien/ctrlp.vim'
-	let g:ctrlp_custom_ignore = {
-	  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-	  \ 'binary file': '\v\.(exe|so|dll)$',
-	  \ }
-	let g:ctrlp_working_path_mode=0
-	let g:ctrlp_match_window_bottom=1
-	let g:ctrlp_max_height=15
-	let g:ctrlp_match_window_reversed=0
-	let g:ctrlp_mruf_max=500
-	let g:ctrlp_follow_symlinks=1
+	"Plugin 'kien/ctrlp.vim'
+	"let g:ctrlp_custom_ignore = {
+	"  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+	"  \ 'binary file': '\v\.(exe|so|dll)$',
+	"  \ }
+	"let g:ctrlp_working_path_mode=0
+	"let g:ctrlp_match_window_bottom=1
+	"let g:ctrlp_max_height=15
+	"let g:ctrlp_match_window_reversed=0
+	"let g:ctrlp_mruf_max=500
+	"let g:ctrlp_follow_symlinks=1
 
 
 	""""""""""""""""""""""""""""""
@@ -454,30 +486,91 @@ endif
 	"let g:CCTreeOrientation = "rightbelow"
 
     """"""""""""""""""""""""""""
-    Plugin 'chazy/cscope_maps'
+    "Plugin 'chazy/cscope_maps'
 	""""""""""""""""""""""""""""
 	" NERD commenter
 	"""""""""""""""""""""""""""
-	Bundle 'The-NERD-Commenter'
-	Bundle 'gtk-vim-syntax'
-	Bundle 'rkulla/pydiction'
-	let g:pydiction_location = '/home/steven/.vim/bundle/pydiction/complete-dict'
+	"Bundle 'The-NERD-Commenter'
+	"Bundle 'gtk-vim-syntax'
+	"Bundle 'rkulla/pydiction'
+	"let g:pydiction_location = '/home/steven/.vim/bundle/pydiction/complete-dict'
 	"let g:pydiction_menu_height = 3
-	Bundle 'Lokaltog/vim-easymotion'
-	let g:EasyMotion_smartcase = 1
-	let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
-	map <Leader><leader>h <Plug>(easymotion-linebackward)
-	map <Leader><Leader>j <Plug>(easymotion-j)
-	map <Leader><Leader>k <Plug>(easymotion-k)
-	map <Leader><leader>l <Plug>(easymotion-lineforward)
-	" 重复上一次操作, 类似repeat插件, 很强大
-	map <Leader><leader>. <Plug>(easymotion-repeat)
+	"Bundle 'Lokaltog/vim-easymotion'
+	"
+    "let g:EasyMotion_smartcase = 1
+	"let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
+	"map <Leader><leader>h <Plug>(easymotion-linebackward)
+	"map <Leader><Leader>j <Plug>(easymotion-j)
+	"map <Leader><Leader>k <Plug>(easymotion-k)
+	"map <Leader><leader>l <Plug>(easymotion-lineforward)
+	"" 重复上一次操作, 类似repeat插件, 很强大
+	"map <Leader><leader>. <Plug>(easymotion-repeat)
 
-	Bundle 'terryma/vim-multiple-cursors'
-	let g:multi_cursor_use_default_mapping=0
-	"" Default mapping
-	let g:multi_cursor_next_key='<C-n>'
-	"let g:multi_cursor_prev_key='<C-l>'
-	let g:multi_cursor_skip_key='<C-x>'
-	let g:multi_cursor_quit_key='<Esc>'
+	"Bundle 'terryma/vim-multiple-cursors'
+	"let g:multi_cursor_use_default_mapping=0
+	""" Default mapping
+	"let g:multi_cursor_next_key='<C-n>'
+	""let g:multi_cursor_prev_key='<C-l>'
+	"let g:multi_cursor_skip_key='<C-x>'
+	"let g:multi_cursor_quit_key='<Esc>'
+
+    " vim-workspace
+    let g:workspace_session_directory = $HOME . '/.vim/sessions/'
+    let g:workspace_session_disable_on_args = 1
+    let g:workspace_autosave = 0
+    nnoremap <space>ws :ToggleWorkspace<CR>
+
+    " last active tab
+    if !exists('g:lasttab')
+      let g:lasttab = 1
+    endif
+    nmap <space>0 :exe "tabn ".g:lasttab<CR>
+    au TabLeave * let g:lasttab = tabpagenr()
+
+" treesitter
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = all, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  highlight = {
+    enable = true,              -- false will disable the whole extension
+    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    -- Using this option may slow down your editor, and you may see some duplicate highlights.
+    -- Instead of true it can also be a list of languages
+    additional_vim_regex_highlighting = false,
+  },
+}
+EOF
+
+" telescope
+lua <<EOF
+require('telescope').setup({
+  defaults = {
+    vimgrep_arguments = {
+      'rg',
+      '--color=never',
+      '--no-heading',
+      '--with-filename',
+      '--line-number',
+      '--column',
+      '--smart-case',
+      '-L'
+--      '--regexp'
+    },
+    file_ignore_patterns = {'tags', 'cscope.out'},
+    --layout_strategy = "vertical",
+    --path_display = { shorten = 3 },
+    --sorting_strategy = "ascending",
+    file_sorter =  require'telescope.sorters'.get_fzy_sorter,
+    generic_sorter =  require'telescope.sorters'.get_fzy_sorter,
+  },
+})
+EOF
+nnoremap <space>ff <cmd>Telescope find_files<cr>
+nnoremap <space>fg <cmd>Telescope live_grep<cr>
+nnoremap <F8> <cmd>Telescope treesitter<cr>
+nnoremap <C-P> <cmd>Telescope find_files<cr>
+nnoremap <C-N> <cmd>Telescope oldfiles<cr>
+nnoremap <leader>F <cmd>Telescope live_grep<cr>
+nnoremap <leader>G <cmd>Telescope grep_string<cr>
 
