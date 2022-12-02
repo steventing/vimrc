@@ -1,6 +1,31 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " General                                                     "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+call plug#begin()
+Plug 'vim-airline/vim-airline', { 'tag': 'v0.10' }
+Plug 'vim-airline/vim-airline-themes'
+Plug 'jeffkreeftmeijer/vim-numbertoggle'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
+Plug 'ntpeters/vim-better-whitespace'
+Plug 'preservim/nerdtree'
+Plug 'majutsushi/tagbar'
+Plug 'thaerkh/vim-workspace'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'branch': 'v0.8.0'}
+Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'preservim/nerdcommenter'
+Plug 'chriskempson/base16-vim'
+Plug 'will133/vim-dirdiff'
+Plug 'google/vim-searchindex'
+Plug 'ryanoasis/vim-devicons'
+"Plug 'ronakg/quickr-preview.vim'
+Plug 'mhinz/vim-signify'
+Plug 'wikitopian/hardmode'
+Plug 'unblevable/quick-scope'
+call plug#end()
+
 set nocompatible                       " Get out of VI's compatible mode
 "set autoindent                        " Copy indent from current line when starting a new line
 set autoread                           " Set to auto read when a file is changed from the outside
@@ -27,6 +52,7 @@ set wildmenu                           " wild char completion menu"
 set showfulltag                        " Show full completion tags
 set laststatus=2                       " The last window will always have a status line
 set incsearch
+set splitright
 
 " How many tenths of a second to blink when matching brackets
 set mat=2
@@ -76,8 +102,8 @@ au BufRead,BufNewFile *.py,*.pyw,*.cpp set expandtab
 au BufRead,BufNewFile *.py,*.pyw,*.cpp set ts=4
 au BufRead,BufNewFile *.py,*.pyw,*.cpp set sts=4
 
-autocmd InsertLeave * hi CursorLine cterm=BOLD ctermfg=NONE   ctermbg=17
-autocmd InsertEnter * hi CursorLine cterm=BOLD ctermfg=NONE   ctermbg=238
+autocmd InsertLeave * hi CursorLine cterm=BOLD ctermfg=NONE guibg=SteelBlue4
+autocmd InsertEnter * hi CursorLine cterm=BOLD ctermfg=NONE guibg=PaleVioletRed4
 "nnoremap <C-N> a<CR><Esc>k$
 "nnoremap <F8> :tabn<CR>
 "nnoremap <F7> :tabp<CR>
@@ -106,6 +132,7 @@ autocmd FileType c map :!gcc --o "%:p:r.out" "%:p" %% "%:r.out"<CR>
 autocmd BufRead,BufNewFile *.py vmap f :w !python <CR>
 autocmd QuickFixCmdPost *grep* cwindow
 autocmd FileType qf wincmd J
+"autocmd! FileType qf nnoremap <buffer> <leader><Enter> <C-w><Enter><C-w>L
 
 fu! ToggleFold()
 	if foldlevel('.') == 0
@@ -184,11 +211,17 @@ endfunc
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Color Scheme                                                "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-colorscheme yzlin256
-"colorscheme xorium
-"colorscheme molokai
-"colorscheme inkpot
-"colorscheme zenburn
+set background=dark
+set termguicolors
+if &term =~# '^screen'
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+endif
+
+let base16colorspace=256
+"colorscheme yzlin256
+colorscheme base16-oceanicnext
+
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -198,7 +231,7 @@ colorscheme yzlin256
 let g:mapleader = ","
 
 nmap <Leader>w :w!<CR>
-nmap <Leader>q :q<CR>
+nmap <Leader><Leader>q :q<CR>
 nmap <Leader>b :bdelete<CR>
 nmap <Leader>l :b#<CR>
 "nmap <Leader>p :set paste<CR>
@@ -256,20 +289,19 @@ map <leader>gr :execute "Gtags -r " . expand("<cword>") <CR>
 "map <leader>G :execute "grep " . expand("<cword>") . " "<CR>
 map <leader>s :execute "tab: cs f s " . expand("<cword>") <CR>
 map <leader>t :execute "tab: cs f t " . expand("<cword>") <CR>
-"map <leader>h4 :execute "Highlight 4 " . expand("<cword>") <CR>
-"map <leader>h5 :execute "Highlight 5 " . expand("<cword>") <CR>
-"map <leader>h6 :execute "Highlight 6 " . expand("<cword>") <CR>
-"map <leader>h7 :execute "Highlight 7 " . expand("<cword>") <CR>
-"map <leader>h8 :execute "Highlight 8 " . expand("<cword>") <CR>
-"map <leader>hc4 :Hclear 4<CR>
-"map <leader>hc5 :Hclear 5<CR>
-"map <leader>hc6 :Hclear 6<CR>
-"map <leader>hc7 :Hclear 7<CR>
-"map <leader>hc8 :Hclear 8<CR>
+map <leader>h4 :execute "Highlight 4 " . expand("<cword>") <CR>
+map <leader>h5 :execute "Highlight 5 " . expand("<cword>") <CR>
+map <leader>h6 :execute "Highlight 6 " . expand("<cword>") <CR>
+map <leader>h7 :execute "Highlight 7 " . expand("<cword>") <CR>
+map <leader>h8 :execute "Highlight 8 " . expand("<cword>") <CR>
+map <leader>hc4 :Hclear 4<CR>
+map <leader>hc5 :Hclear 5<CR>
+map <leader>hc6 :Hclear 6<CR>
+map <leader>hc7 :Hclear 7<CR>
+map <leader>hc8 :Hclear 8<CR>
 map <leader>hl  :match WhitespaceEOL /\s\+$/ <CR>
 nnoremap <leader>c yiw:cs find s <C-R>=expand("<cword>")<CR><CR>:bd<CR>:cwindow<CR>/<C-R>0<CR>
 
-map <leader>h1 :execute "Highlight 8 " . expand("<cword>") <CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Folding                                                     "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -302,8 +334,11 @@ set hlsearch				" search highlighting
 set cc=80
 highlight ColorColumn ctermbg=236
 highlight WhitespaceEOL ctermbg=red guibg=red
+highlight CursorLine guibg=SteelBlue4
+highlight Search guibg=OrangeRed
 "set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
-set listchars=tab:>-,trail:-
+"set listchars=tab:>-,trail:-
+set list lcs=tab:»\ ,trail:¬,extends:#
 " 防止tmux下vim的背景色显示异常
 " Refer: http://sunaku.github.io/vim-256color-bce.html
 if &term =~ '256color'
@@ -313,22 +348,6 @@ if &term =~ '256color'
   set t_ut=
 endif
 
-call plug#begin()
-Plug 'vim-airline/vim-airline', { 'tag': 'v0.10' }
-Plug 'vim-airline/vim-airline-themes'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-surround'
-Plug 'ntpeters/vim-better-whitespace'
-Plug 'preservim/nerdtree'
-Plug 'majutsushi/tagbar'
-Plug 'thaerkh/vim-workspace'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'neovim/nvim-lspconfig'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
-Plug 'preservim/nerdcommenter'
-"Plug 'unblevable/quick-scope'
-call plug#end()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plug-in configuration                                       "
@@ -367,6 +386,8 @@ call plug#end()
 	nmap <Leader>gbl :Git blame<CR>
 	nmap <Leader>gst :Git<CR>
 	nmap <Leader>glo :Gclog<CR>
+	nmap <Leader>gdf :Gvdiffsplit
+
 
 	""""""""""""""""""""""""""""""
 	" gitv
@@ -569,8 +590,12 @@ EOF
 nnoremap <space>ff <cmd>Telescope find_files<cr>
 nnoremap <space>fg <cmd>Telescope live_grep<cr>
 nnoremap <F8> <cmd>Telescope treesitter<cr>
-nnoremap <C-P> <cmd>Telescope find_files<cr>
+nnoremap <C-P> <cmd>Telescope find_files follow=true<cr>
 nnoremap <C-N> <cmd>Telescope oldfiles<cr>
 nnoremap <leader>F <cmd>Telescope live_grep<cr>
 nnoremap <leader>G <cmd>Telescope grep_string<cr>
+nnoremap <leader><space> <cmd>Telescope resume<cr>
 
+" signify
+"let g:signify_sign_show_text = 1
+set updatetime=100
