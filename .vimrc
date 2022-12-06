@@ -335,7 +335,7 @@ set cc=80
 highlight ColorColumn ctermbg=236
 highlight WhitespaceEOL ctermbg=red guibg=red
 highlight CursorLine guibg=SteelBlue4
-highlight Search guibg=OrangeRed
+highlight Search guibg=DarkOrange3 guifg=White gui=bold
 "set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
 "set listchars=tab:>-,trail:-
 set list lcs=tab:»\ ,trail:¬,extends:#
