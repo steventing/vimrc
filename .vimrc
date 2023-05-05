@@ -8,13 +8,15 @@ Plug 'jeffkreeftmeijer/vim-numbertoggle'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'ntpeters/vim-better-whitespace'
-Plug 'preservim/nerdtree'
+"Plug 'preservim/nerdtree'
 Plug 'majutsushi/tagbar'
 Plug 'thaerkh/vim-workspace'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'branch': 'v0.8.0'}
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'kyazdani42/nvim-tree.lua'
 Plug 'preservim/nerdcommenter'
 Plug 'chriskempson/base16-vim'
 Plug 'will133/vim-dirdiff'
@@ -24,6 +26,9 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'mhinz/vim-signify'
 Plug 'wikitopian/hardmode'
 Plug 'unblevable/quick-scope'
+"lsp
+Plug 'neovim/nvim-lspconfig'
+Plug 'm-pilia/vim-ccls'
 call plug#end()
 
 set nocompatible                       " Get out of VI's compatible mode
@@ -231,7 +236,8 @@ colorscheme base16-oceanicnext
 let g:mapleader = ","
 
 nmap <Leader>w :w!<CR>
-nmap <Leader><Leader>q :q<CR>
+"nmap <Leader><Leader>q :q<CR>
+nmap <Leader>q :q<CR>
 nmap <Leader>b :bdelete<CR>
 nmap <Leader>l :b#<CR>
 "nmap <Leader>p :set paste<CR>
@@ -375,8 +381,15 @@ endif
 	" https://github.com/scrooloose/nerdtree
 	""""""""""""""""""""""""""""""
 	"Bundle 'scrooloose/nerdtree'
-	nmap <F5> :NERDTreeToggle<CR>
-	"let g:NERDTreeWinSize = 25
+	"nmap <F5> :NERDTreeToggle<CR>
+
+    " nvim-tree
+lua <<EOF
+    require'nvim-tree'.setup {}
+EOF
+    let g:nvim_tree_side = 'left' "left by default
+    nnoremap <F5> :NvimTreeToggle<CR>
+    "let g:NERDTreeWinSize = 25
 
 	""""""""""""""""""""""""""""""
 	" vim-fugitive
@@ -582,8 +595,8 @@ require('telescope').setup({
     --layout_strategy = "vertical",
     --path_display = { shorten = 3 },
     --sorting_strategy = "ascending",
-    file_sorter =  require'telescope.sorters'.get_fzy_sorter,
-    generic_sorter =  require'telescope.sorters'.get_fzy_sorter,
+    --file_sorter =  require'telescope.sorters'.get_fzy_sorter,
+    --generic_sorter =  require'telescope.sorters'.get_fzy_sorter,
   },
 })
 EOF
@@ -593,7 +606,8 @@ nnoremap <F8> <cmd>Telescope treesitter<cr>
 nnoremap <C-P> <cmd>Telescope find_files follow=true<cr>
 nnoremap <C-N> <cmd>Telescope oldfiles<cr>
 nnoremap <leader>F <cmd>Telescope live_grep<cr>
-nnoremap <leader>G <cmd>Telescope grep_string<cr>
+nnoremap <leader>B <cmd>Telescope grep_string<cr>
+nnoremap <leader>G <cmd>lua require'telescope.builtin'.grep_string{word_match = "-w"}<cr>
 nnoremap <leader><space> <cmd>Telescope resume<cr>
 
 " signify
