@@ -8,11 +8,11 @@ Plug 'jeffkreeftmeijer/vim-numbertoggle'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'ntpeters/vim-better-whitespace'
+Plug 'junegunn/gv.vim'
 "Plug 'preservim/nerdtree'
 Plug 'majutsushi/tagbar'
 Plug 'thaerkh/vim-workspace'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'branch': 'v0.8.0'}
-Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
@@ -29,6 +29,26 @@ Plug 'unblevable/quick-scope'
 "lsp
 Plug 'neovim/nvim-lspconfig'
 Plug 'm-pilia/vim-ccls'
+Plug 'MattesGroeger/vim-bookmarks'
+Plug 'azabiong/vim-highlighter'
+Plug 'voldikss/vim-floaterm'
+
+"auto complete
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-cmdline'
+Plug 'hrsh7th/nvim-cmp'
+
+" For vsnip users.
+Plug 'hrsh7th/cmp-vsnip'
+Plug 'hrsh7th/vim-vsnip'
+
+" git
+Plug 'lewis6991/gitsigns.nvim'
+
+
+" Vim Script
 call plug#end()
 
 set nocompatible                       " Get out of VI's compatible mode
@@ -58,6 +78,7 @@ set showfulltag                        " Show full completion tags
 set laststatus=2                       " The last window will always have a status line
 set incsearch
 set splitright
+set statusline+=%{get(b:,'gitsigns_status','')}
 
 " How many tenths of a second to blink when matching brackets
 set mat=2
@@ -137,7 +158,7 @@ autocmd FileType c map :!gcc --o "%:p:r.out" "%:p" %% "%:r.out"<CR>
 autocmd BufRead,BufNewFile *.py vmap f :w !python <CR>
 autocmd QuickFixCmdPost *grep* cwindow
 autocmd FileType qf wincmd J
-"autocmd! FileType qf nnoremap <buffer> <leader><Enter> <C-w><Enter><C-w>L
+autocmd! FileType qf nnoremap <buffer> <leader><Enter> <C-w><Enter><C-w>L
 
 fu! ToggleFold()
 	if foldlevel('.') == 0
@@ -227,6 +248,17 @@ let base16colorspace=256
 "colorscheme yzlin256
 colorscheme base16-oceanicnext
 
+"hi DiffChange   gui=bold    guifg=#272727          guibg=#e5d5ac
+"hi DiffChange   gui=bold    guifg=#272727          guibg=#e5d5ac
+"hi DiffDelete   gui=bold    guifg=none             guibg=#ffb0b0
+"hi DiffText     gui=bold    guifg=#ff8080          guibg=#8cbee2
+hi DiffAdd      gui=bold    guifg=none             guibg=#006030
+hi DiffChange   gui=bold    guifg=none             guibg=#bb3d00
+hi DiffDelete   gui=bold    guifg=none             guibg=#930000
+"hi DiffText     gui=bold    guifg=#d200d2          guibg=#8cbee2
+hi DiffText     gui=reverse guifg=#ff8700          guibg=#262626
+
+
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -239,14 +271,18 @@ nmap <Leader>w :w!<CR>
 "nmap <Leader><Leader>q :q<CR>
 nmap <Leader>q :q<CR>
 nmap <Leader>b :bdelete<CR>
-nmap <Leader>l :b#<CR>
+"nmap <Leader>l :b#<CR>
+nmap <Leader>L :Hi<<CR>
+nmap <Leader>l :Hi><CR>
+nmap <Leader>N :Hi{<CR>
+nmap <Leader>n :Hi}<CR>
 "nmap <Leader>p :set paste<CR>
 nmap <Leader>j :tabp<CR>
 nmap <Leader>k :tabn<CR>
 nmap <Leader>T :tabnew<CR>
 nmap <Leader>S :tab split<CR>
 "nmap <Leader>mn :set makeprg=make<CR>
-nmap <Leader>fr :call FormartSrc()<CR>
+"nmap <Leader>fr :call FormartSrc()<CR>
 nmap <Leader>p <C-W>gf<CR>
 nmap <Leader>m :tabm<CR>
 
@@ -289,24 +325,46 @@ nmap <F7> :!find -L . -iname '*.[ch]' > cscope.files <CR> :!cscope -Rb<CR>:cs ki
 "for vimgrep
 "map <leader>gg :grep
 map <leader>gs :execute "Gtags " . expand("<cword>") <CR>
-map <leader>gr :execute "Gtags -r " . expand("<cword>") <CR>
+"map <leader>gr :execute "Gtags -r " . expand("<cword>") <CR>
 "map <leader>gg :g/ /caddexpr expand("%") . ":" . line(".") . ":" . getline(".")
 "map <leader>gs :set grepprg=rg\ \-C2\ \-\-vimgrep\ \$\*
-"map <leader>G :execute "grep " . expand("<cword>") . " "<CR>
-map <leader>s :execute "tab: cs f s " . expand("<cword>") <CR>
-map <leader>t :execute "tab: cs f t " . expand("<cword>") <CR>
-map <leader>h4 :execute "Highlight 4 " . expand("<cword>") <CR>
-map <leader>h5 :execute "Highlight 5 " . expand("<cword>") <CR>
-map <leader>h6 :execute "Highlight 6 " . expand("<cword>") <CR>
-map <leader>h7 :execute "Highlight 7 " . expand("<cword>") <CR>
-map <leader>h8 :execute "Highlight 8 " . expand("<cword>") <CR>
-map <leader>hc4 :Hclear 4<CR>
-map <leader>hc5 :Hclear 5<CR>
-map <leader>hc6 :Hclear 6<CR>
-map <leader>hc7 :Hclear 7<CR>
-map <leader>hc8 :Hclear 8<CR>
+nnoremap <space>G :execute "grep " . expand("<cword>") . " "<CR><CR>
+"map <leader>s :execute "tab: cs f s " . expand("<cword>") <CR>
+"map <leader>t :execute "tab: cs f t " . expand("<cword>") <CR>
+"map <leader>h4 :execute "Highlight 4 " . expand("<cword>") <CR>
+"map <leader>h5 :execute "Highlight 5 " . expand("<cword>") <CR>
+"map <leader>h6 :execute "Highlight 6 " . expand("<cword>") <CR>
+"map <leader>h7 :execute "Highlight 7 " . expand("<cword>") <CR>
+"map <leader>h8 :execute "Highlight 8 " . expand("<cword>") <CR>
+"map <leader>hc4 :Hclear 4<CR>
+"map <leader>hc5 :Hclear 5<CR>
+"map <leader>hc6 :Hclear 6<CR>
+"map <leader>hc7 :Hclear 7<CR>
+"map <leader>hc8 :Hclear 8<CR>
 map <leader>hl  :match WhitespaceEOL /\s\+$/ <CR>
 nnoremap <leader>c yiw:cs find s <C-R>=expand("<cword>")<CR><CR>:bd<CR>:cwindow<CR>/<C-R>0<CR>
+
+" auto complete
+" Expand
+"imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
+"smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
+
+" Expand or jump
+"imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+"smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+
+" Jump forward or backward
+imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+
+" Select or cut text to use as $TM_SELECTED_TEXT in the next snippet.
+" See https://github.com/hrsh7th/vim-vsnip/pull/50
+nmap        s   <Plug>(vsnip-select-text)
+xmap        s   <Plug>(vsnip-select-text)
+nmap        S   <Plug>(vsnip-cut-text)
+xmap        S   <Plug>(vsnip-cut-text)
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Folding                                                     "
@@ -332,6 +390,8 @@ map <C-j> 10j
 map <C-k> 10k
 map <C-h> 10h
 map <C-l> 10l
+noremap Zz <c-w>_ \| <c-w>\|
+noremap Zo <c-w>=
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Syntax                                                      "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -399,7 +459,7 @@ EOF
 	nmap <Leader>gbl :Git blame<CR>
 	nmap <Leader>gst :Git<CR>
 	nmap <Leader>glo :Gclog<CR>
-	nmap <Leader>gdf :Gvdiffsplit
+	nmap <Leader>gvd :Gvdiffsplit
 
 
 	""""""""""""""""""""""""""""""
@@ -561,6 +621,21 @@ EOF
     nmap <space>0 :exe "tabn ".g:lasttab<CR>
     au TabLeave * let g:lasttab = tabpagenr()
 
+"vim bookmark
+    "highlight BookmarkSign ctermbg=whatever ctermfg=whatever
+    "highlight BookmarkAnnotationSign ctermbg=whatever ctermfg=whatever
+    "highlight BookmarkLine ctermbg=whatever ctermfg=whatever
+    "highlight BookmarkAnnotationLine ctermbg=whatever ctermfg=whatever
+    highlight BookmarkSign ctermbg=NONE ctermfg=160
+    highlight BookmarkLine ctermbg=194 ctermfg=NONE
+    let g:bookmark_sign = '♥'
+    let g:bookmark_highlight_lines = 1
+
+"vim highlight
+    let HiSyncMode=1
+    let HiFindTool = 'rg -H --color=never --no-heading --column --smart-case'
+    hi HiFollow ctermfg=254 ctermbg=246 guifg=#e7efef guibg=#979797 cterm=bold gui=bold
+
 " treesitter
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
@@ -600,6 +675,182 @@ require('telescope').setup({
   },
 })
 EOF
+
+" ccls
+"lua <<EOF
+"require'lspconfig'.ccls.setup{
+    "on_attach = on_attach,
+    "single_file_support = true
+"}
+"EOF
+
+"let g:ccls_close_on_jump = v:true
+
+"nmap <silent> <buffer> x    <Plug>(yggdrasil-open-node)
+"<Plug>(yggdrasil-toggle-node)
+"<Plug>(yggdrasil-open-node)
+"<Plug>(yggdrasil-close-node)
+"<Plug>(yggdrasil-execute-node)
+"
+" clangd
+lua <<EOF
+-- require'lspconfig'.pyright.setup{}
+require'lspconfig'.clangd.setup{}
+-- require'lspconfig'.gdscript.setup{}
+
+-- Mappings.
+-- See `:help vim.diagnostic.*` for documentation on any of the below functions
+local opts = { noremap=true, silent=true }
+vim.api.nvim_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+vim.api.nvim_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+
+-- Use an on_attach function to only map the following keys
+-- after the language server attaches to the current buffer
+local on_attach = function(client, bufnr)
+  -- Enable completion triggered by <c-x><c-o>
+  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Mappings.
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+end
+
+-- Use a loop to conveniently call 'setup' on multiple servers and
+-- map buffer local keybindings when the language server attaches
+-- local servers = { 'pyright', 'rust_analyzer', 'clangd', 'gdscript' }
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+local servers = {'clangd'}
+for _, lsp in pairs(servers) do
+  require('lspconfig')[lsp].setup {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    flags = {
+      -- This will be the default in neovim 0.7+
+      debounce_text_changes = 150,
+    }
+  }
+end
+EOF
+
+" auto complete
+lua <<EOF
+  -- Set up nvim-cmp.
+  local cmp = require'cmp'
+
+  cmp.setup({
+    snippet = {
+      -- REQUIRED - you must specify a snippet engine
+      expand = function(args)
+        vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+        -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+        -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+        -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+      end,
+    },
+    window = {
+      -- completion = cmp.config.window.bordered(),
+      -- documentation = cmp.config.window.bordered(),
+    },
+    mapping = cmp.mapping.preset.insert({
+      ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-f>'] = cmp.mapping.scroll_docs(4),
+      ['<C-e>'] = cmp.mapping.complete(),
+      ['<C-c>'] = cmp.mapping.abort(),
+      ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    }),
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+      { name = 'vsnip' }, -- For vsnip users.
+      -- { name = 'luasnip' }, -- For luasnip users.
+      -- { name = 'ultisnips' }, -- For ultisnips users.
+      -- { name = 'snippy' }, -- For snippy users.
+    }, {
+      { name = 'buffer' },
+    })
+  })
+EOF
+
+" git
+lua <<EOF
+require('gitsigns').setup{
+  watch_gitdir = {
+    interval = 1000,
+    follow_files = true
+  },
+  attach_to_untracked = true,
+  current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
+  current_line_blame_opts = {
+    virt_text = true,
+    virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
+    delay = 1000,
+    ignore_whitespace = false,
+  },
+  current_line_blame_formatter = '<author>, <author_time:%Y-%m-%d> - <summary>',
+  yadm = {
+    enable = false
+  },
+  on_attach = function(bufnr)
+    local gs = package.loaded.gitsigns
+
+    local function map(mode, l, r, opts)
+      opts = opts or {}
+      opts.buffer = bufnr
+      vim.keymap.set(mode, l, r, opts)
+    end
+
+    -- Navigation
+    map('n', ']c', function()
+      if vim.wo.diff then return ']c' end
+      vim.schedule(function() gs.next_hunk() end)
+      return '<Ignore>'
+    end, {expr=true})
+
+    map('n', '[c', function()
+      if vim.wo.diff then return '[c' end
+      vim.schedule(function() gs.prev_hunk() end)
+      return '<Ignore>'
+    end, {expr=true})
+
+    -- Actions
+    map('n', '<leader>hs', gs.stage_hunk)
+    map('n', '<leader>hr', gs.reset_hunk)
+    map('v', '<leader>hs', function() gs.stage_hunk {vim.fn.line("."), vim.fn.line("v")} end)
+    map('v', '<leader>hr', function() gs.reset_hunk {vim.fn.line("."), vim.fn.line("v")} end)
+    map('n', '<leader>hS', gs.stage_buffer)
+    map('n', '<leader>hu', gs.undo_stage_hunk)
+    map('n', '<leader>hR', gs.reset_buffer)
+    map('n', '<leader>hp', gs.preview_hunk)
+    map('n', '<leader>hb', function() gs.blame_line{full=true} end)
+    map('n', '<leader>tb', gs.toggle_current_line_blame)
+    map('n', '<leader>hd', gs.diffthis)
+    map('n', '<leader>hD', function() gs.diffthis('~') end)
+    map('n', '<leader>td', gs.toggle_deleted)
+
+    -- Text object
+    map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
+  end
+}
+EOF
+
+" floaterm
+let g:floaterm_keymap_prev   = '<leader>fp'
+let g:floaterm_keymap_new    = '<leader>fn'
+let g:floaterm_keymap_toggle = '<leader>ff'
+
 nnoremap <space>ff <cmd>Telescope find_files<cr>
 nnoremap <space>fg <cmd>Telescope live_grep<cr>
 nnoremap <F8> <cmd>Telescope treesitter<cr>
@@ -607,8 +858,12 @@ nnoremap <C-P> <cmd>Telescope find_files follow=true<cr>
 nnoremap <C-N> <cmd>Telescope oldfiles<cr>
 nnoremap <leader>F <cmd>Telescope live_grep<cr>
 nnoremap <leader>B <cmd>Telescope grep_string<cr>
+nnoremap <leader>Q <cmd>Telescope quickfixhistory<cr>
 nnoremap <leader>G <cmd>lua require'telescope.builtin'.grep_string{word_match = "-w"}<cr>
 nnoremap <leader><space> <cmd>Telescope resume<cr>
+
+nnoremap <leader>gr <cmd>lua require'telescope.builtin'.lsp_references{jump_type = "never"}<cr>
+nnoremap <leader>gd <cmd>lua require'telescope.builtin'.lsp_definitions{jump_type = "never"}<cr>
 
 " signify
 "let g:signify_sign_show_text = 1
