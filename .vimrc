@@ -4,15 +4,16 @@
 call plug#begin()
 Plug 'vim-airline/vim-airline', { 'tag': 'v0.10' }
 Plug 'vim-airline/vim-airline-themes'
-Plug 'jeffkreeftmeijer/vim-numbertoggle'
+"Plug 'jeffkreeftmeijer/vim-numbertoggle'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'ntpeters/vim-better-whitespace'
-Plug 'junegunn/gv.vim'
+"Plug 'junegunn/gv.vim'
 "Plug 'preservim/nerdtree'
 Plug 'majutsushi/tagbar'
 Plug 'thaerkh/vim-workspace'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'branch': 'v0.8.0'}
+"Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'branch': 'v0.8.0'}
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
@@ -24,7 +25,6 @@ Plug 'google/vim-searchindex'
 Plug 'ryanoasis/vim-devicons'
 "Plug 'ronakg/quickr-preview.vim'
 Plug 'mhinz/vim-signify'
-Plug 'wikitopian/hardmode'
 Plug 'unblevable/quick-scope'
 "lsp
 Plug 'neovim/nvim-lspconfig'
@@ -45,7 +45,7 @@ Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
 
 " git
-Plug 'lewis6991/gitsigns.nvim'
+"Plug 'lewis6991/gitsigns.nvim'
 
 
 " Vim Script
@@ -496,14 +496,23 @@ EOF
 
 	"Plugin 'bling/vim-airline'
 	"Plugin 'vim-airline/vim-airline-themes'
+    let g:airline_theme='papercolor'
+	"let g:airline_theme='violet'
 	let g:airline_powerline_fonts=1
 	let g:airline#extensions#tabline#enabled=1
 	let g:airline#extensions#tabline#buffer_nr_show=0
-	let g:airline#extensions#tabline#buffer_nr_format='%s: '
-	let g:airline#extensions#tabline#left_sep = ' '
-	let g:airline#extensions#tabline#left_alt_sep = '|'
+	let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
+	let g:airline#extensions#tabline#show_tab_nr = 1
+	let g:airline#extensions#tabline#formatter = 'unique_tail'
+	let g:airline#extensions#tabline#fnametruncate = 16
+	let g:airline#extensions#tabline#fnamecollapse = 2
+	let g:airline#extensions#tabline#buffer_idx_mode = 1"
+    let g:airline#extensions#virtualenv#enabled = 0
+	"let g:airline#extensions#tabline#buffer_nr_show=0
+	"let g:airline#extensions#tabline#buffer_nr_format='%s: '
+	"let g:airline#extensions#tabline#left_sep = ' '
+	"let g:airline#extensions#tabline#left_alt_sep = '|'
 	"let g:airline_theme='powerlineish'
-	let g:airline_theme='papercolor'
 	"let g:airline_theme='bubblegum'
 	if !exists('g:airline_symbols')
 		let g:airline_symbols = {}
@@ -513,10 +522,10 @@ EOF
 	let g:airline_left_sep = '▶'
 	"let g:airline_right_sep = '«'
 	let g:airline_right_sep = '◀'
-	let g:airline_symbols.linenr = '␊'
-	"let g:airline_symbols.linenr = '␤'
-	"let g:airline_symbols.linenr = '¶'
-	let g:airline_symbols.branch = '⎇'
+	"let g:airline_symbols.linenr = '␊'
+    let g:airline_symbols.linenr = '␤'
+    "let g:airline_symbols.linenr = '¶'
+    let g:airline_symbols.branch = '⎇'
 	"let g:airline_symbols.paste = 'ρ'
 	let g:airline_symbols.paste = 'P'
 	"let g:airline_symbols.paste = 'Þ'
@@ -525,16 +534,17 @@ EOF
 	"let g:airline_symbols.whitespace = 'W'
 	let g:airline_left_alt_sep = '«'
 	let g:airline_right_alt_sep = '»'
-	let g:airline_symbols.readonly = 'r'
-
-	" airline symbols
-	"let g:airline_left_sep = ''
-	"let g:airline_left_alt_sep = ''
-	"let g:airline_right_sep = ''
-	"let g:airline_right_alt_sep = ''
-	"let g:airline_symbols.branch = ''
-	"let g:airline_symbols.readonly = ''
-	"let g:airline_symbols.linenr = ''
+	"let g:airline_symbols.readonly = 'r'
+    let g:airline_symbols.readonly = ''
+"airline symbols
+    let g:airline_left_sep = ''
+    let g:airline_left_alt_sep = ''
+    let g:airline_right_sep = ''
+    let g:airline_right_alt_sep = ''
+    let g:airline_symbols.branch = ''
+    let g:airline_symbols.readonly = ''
+    let g:airline_symbols.linenr = ''
+    let g:airline_symbols.dirty='⚡'
 
 	"Plugin 'kien/ctrlp.vim'
 	"let g:ctrlp_custom_ignore = {
@@ -639,7 +649,7 @@ EOF
 " treesitter
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = all, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  ensure_installed = {"cpp"}, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
   highlight = {
     enable = true,              -- false will disable the whole extension
     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
@@ -746,7 +756,7 @@ for _, lsp in pairs(servers) do
 end
 EOF
 
-" auto complete
+"auto complete
 lua <<EOF
   -- Set up nvim-cmp.
   local cmp = require'cmp'
@@ -784,68 +794,6 @@ lua <<EOF
   })
 EOF
 
-" git
-lua <<EOF
-require('gitsigns').setup{
-  watch_gitdir = {
-    interval = 1000,
-    follow_files = true
-  },
-  attach_to_untracked = true,
-  current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
-  current_line_blame_opts = {
-    virt_text = true,
-    virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
-    delay = 1000,
-    ignore_whitespace = false,
-  },
-  current_line_blame_formatter = '<author>, <author_time:%Y-%m-%d> - <summary>',
-  yadm = {
-    enable = false
-  },
-  on_attach = function(bufnr)
-    local gs = package.loaded.gitsigns
-
-    local function map(mode, l, r, opts)
-      opts = opts or {}
-      opts.buffer = bufnr
-      vim.keymap.set(mode, l, r, opts)
-    end
-
-    -- Navigation
-    map('n', ']c', function()
-      if vim.wo.diff then return ']c' end
-      vim.schedule(function() gs.next_hunk() end)
-      return '<Ignore>'
-    end, {expr=true})
-
-    map('n', '[c', function()
-      if vim.wo.diff then return '[c' end
-      vim.schedule(function() gs.prev_hunk() end)
-      return '<Ignore>'
-    end, {expr=true})
-
-    -- Actions
-    map('n', '<leader>hs', gs.stage_hunk)
-    map('n', '<leader>hr', gs.reset_hunk)
-    map('v', '<leader>hs', function() gs.stage_hunk {vim.fn.line("."), vim.fn.line("v")} end)
-    map('v', '<leader>hr', function() gs.reset_hunk {vim.fn.line("."), vim.fn.line("v")} end)
-    map('n', '<leader>hS', gs.stage_buffer)
-    map('n', '<leader>hu', gs.undo_stage_hunk)
-    map('n', '<leader>hR', gs.reset_buffer)
-    map('n', '<leader>hp', gs.preview_hunk)
-    map('n', '<leader>hb', function() gs.blame_line{full=true} end)
-    map('n', '<leader>tb', gs.toggle_current_line_blame)
-    map('n', '<leader>hd', gs.diffthis)
-    map('n', '<leader>hD', function() gs.diffthis('~') end)
-    map('n', '<leader>td', gs.toggle_deleted)
-
-    -- Text object
-    map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
-  end
-}
-EOF
-
 " floaterm
 let g:floaterm_keymap_prev   = '<leader>fp'
 let g:floaterm_keymap_new    = '<leader>fn'
@@ -868,3 +816,4 @@ nnoremap <leader>gd <cmd>lua require'telescope.builtin'.lsp_definitions{jump_typ
 " signify
 "let g:signify_sign_show_text = 1
 set updatetime=100
+set mouse=
